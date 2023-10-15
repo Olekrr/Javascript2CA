@@ -12,27 +12,32 @@ const API_BASE_URL = "https://api.noroff.dev/api/v1";
  * @returns {Promise<Object>} - The response data.
  * @throws {Error} - Throws an error if response is not ok.
  */
-async function fetchData(url, method = "GET", body = null, token = null) {
-    const headers = {
-        "Content-Type": "application/json"
-    };
+export async function fetchData(
+  url,
+  method = "GET",
+  body = null,
+  token = null
+) {
+  const headers = {
+    "Content-Type": "application/json",
+  };
 
-    if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-    }
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
 
-    const response = await fetch(`${API_BASE_URL}${url}`, {
-        method: method,
-        headers: headers,
-        body: body ? JSON.stringify(body) : null
-    });
+  const response = await fetch(`${API_BASE_URL}${url}`, {
+    method: method,
+    headers: headers,
+    body: body ? JSON.stringify(body) : null,
+  });
 
-    if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Error fetching data");
-    }
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || "Error fetching data");
+  }
 
-    return response.json();
+  return response.json();
 }
 
 /**
@@ -44,7 +49,7 @@ async function fetchData(url, method = "GET", body = null, token = null) {
  * @returns {Promise<Object>} - The response data.
  */
 export async function login(email, password) {
-    return fetchData("/social/auth/login", "POST", { email, password });
+  return fetchData("/social/auth/login", "POST", { email, password });
 }
 
 /**
@@ -58,7 +63,12 @@ export async function login(email, password) {
  * @returns {Promise<Object>} - The response data.
  */
 export async function register(username, email, password, token) {
-    return fetchData("/social/auth/register", "POST", { name: username, email, password }, token);
+  return fetchData(
+    "/social/auth/register",
+    "POST",
+    { name: username, email, password },
+    token
+  );
 }
 
 /**
@@ -69,5 +79,5 @@ export async function register(username, email, password, token) {
  * @returns {Promise<Array<Object>>} - An array of post objects.
  */
 export async function getPosts(token) {
-    return fetchData("/social/posts", "GET", null, token);
+  return fetchData("/social/posts", "GET", null, token);
 }
